@@ -41,7 +41,7 @@ def main():
             
         # Reading and parsing the input file
         traffic_records = parse_traffic_file(input_path)
-        
+        #print(traffic_records)
         
         # TODO: Implement traffic analysis
         print("Traffic analysis completed successfully!")
