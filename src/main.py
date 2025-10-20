@@ -8,10 +8,9 @@ import argparse
 import sys
 from pathlib import Path
 
-# imports from other modules (when they will be created)
 from .parser import parse_traffic_file
-#  TrafficAnalyzer()
-#  format_results()
+from .analyzer import TrafficAnalyzer
+from .formatter import format_results
 
 
 def parse_arguments():
@@ -30,7 +29,7 @@ def parse_arguments():
 def main():
     """Main execution function."""
     try:
-        # Parsing command line arguments
+        # Parsing command line argumens
         args = parse_arguments()
         
         # Checking file existence
@@ -39,18 +38,19 @@ def main():
             print(f"Error: File '{args.input_file}' not found.", file=sys.stderr)
             sys.exit(1)
             
-        # Reading and parsing the input file
+        # 1. Reading and parsing the input file
         traffic_records = parse_traffic_file(input_path)
-        #print(traffic_records)
         
-        # TODO: Implement traffic analysis
-        print("Traffic analysis completed successfully!")
+        # 2. Analyzing traffic data
+        analyzer = TrafficAnalyzer(traffic_records)
+        total_cars = analyzer.get_total_cars()
+        daily_totals = analyzer.get_daily_totals()
+        top_half_hours = analyzer.get_top_half_hours(3)
+        min_period = analyzer.get_min_contiguous_period(3)
         
-        # TODO: Implement formatting of results
-        print("Formatting of results completed successfully!")
-        
-        # TODO: Implement output
-        print("Output completed successfully!")
+        # 3. Fomratting and outputting results
+        output = format_results(total_cars, daily_totals, top_half_hours, min_period)
+        print(output)
         
         
     except ValueError as e:

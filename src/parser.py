@@ -8,7 +8,6 @@ from typing import List, Tuple
 def parse_traffic_file(file_path: Path) -> List[Tuple[datetime, int]]:
     """
     Parse traffic file and return list of (timestamp, car_count) tuples.
-    
     """
     records = []
     
@@ -29,6 +28,9 @@ def parse_traffic_file(file_path: Path) -> List[Tuple[datetime, int]]:
                 records.append((timestamp, car_count))
                 
             except ValueError as e:
+                # Preserve the original error message if it's about negative count
+                if "cannot be negative" in str(e):
+                    raise
                 raise ValueError(f"Invalid format at line {line_num}: {line}") from e
     
     return records
